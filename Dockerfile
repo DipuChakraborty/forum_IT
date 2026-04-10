@@ -1,11 +1,11 @@
-FROM python:3.12
+FROM php:8.1-apache
 
-WORKDIR /app
+RUN apt-get update && apt-get install -y \
+    zip unzip git curl libpng-dev \
+    && docker-php-ext-install pdo pdo_mysql
 
-COPY . .
+COPY . /var/www/html
 
-RUN pip install --no-cache-dir -r requirements.txt
+RUN chown -R www-data:www-data /var/www/html
 
-EXPOSE 8000
-
-CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+EXPOSE 80
